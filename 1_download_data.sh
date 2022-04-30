@@ -28,7 +28,7 @@ cd $LOCAL_FRANGIEH_2021_DATA_DIR
 # download the file with all the download links 
 # NOTE: the URL contains a single-use authorization code that must be generated
 # at https://singlecell.broadinstitute.org/single_cell/study/SCP1064/multi-modal-pooled-perturb-cite-seq-screens-in-patient-models-define-novel-mechanisms-of-cancer-immune-evasion#/
-wget --no-check-certificate "https://singlecell.broadinstitute.org/single_cell/api/v1/bulk_download/generate_curl_config?accessions=SCP1064&auth_code=7kHX5tfI&directory=all&context=study" -O cfg.txt
+wget --no-check-certificate "https://singlecell.broadinstitute.org/single_cell/api/v1/bulk_download/generate_curl_config?accessions=SCP1064&auth_code=tVyh0F5f&directory=all&context=study" -O cfg.txt
 
 # download the files
 echo "Downloading single cell portal files!"
