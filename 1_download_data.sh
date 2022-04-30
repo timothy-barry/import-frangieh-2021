@@ -11,17 +11,17 @@
 source ~/.research_config
 
 # check if data directory already exists
-if [ -d "$LOCAL_FRANGIEH_2020_DATA_DIR" ] 
+if [ -d "$LOCAL_FRANGIEH_2021_DATA_DIR" ] 
 then
   echo "Raw data directory already exists!"
   exit 1
 else
   # make the data directory
-  mkdir $LOCAL_FRANGIEH_2020_DATA_DIR
+  mkdir $LOCAL_FRANGIEH_2021_DATA_DIR
 fi
 
 # navigate to data directory
-cd $LOCAL_FRANGIEH_2020_DATA_DIR
+cd $LOCAL_FRANGIEH_2021_DATA_DIR
 
 ####### 1. Download files from single cell portal #########
 
