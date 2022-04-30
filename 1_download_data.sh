@@ -11,7 +11,7 @@
 source ~/.research_config
 
 # check if data directory already exists
-if [ -d $LOCAL_FRANGIEH_2020_DATA_DIR ] 
+if [ -d "$LOCAL_FRANGIEH_2020_DATA_DIR" ] 
 then
   echo "Raw data directory already exists!"
   exit 1
