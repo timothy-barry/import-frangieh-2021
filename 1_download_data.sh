@@ -51,6 +51,6 @@ echo "Downloading supplementary tables!"
 mkdir supp_tables
 cd supp_tables
 supp_tab_url="https://static-content.springer.com/esm/art%3A10.1038%2Fs41588-021-00779-1/MediaObjects/41588_2021_779_MOESM3_ESM.xlsx"
-wget supp_tab_url
+wget $supp_tab_url
 
 echo "Done!"
