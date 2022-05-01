@@ -23,6 +23,10 @@ fi
 # navigate to data directory
 cd $LOCAL_FRANGIEH_2021_DATA_DIR
 
+# create raw data directory
+mkdir raw
+cd raw
+
 ####### 1. Download files from single cell portal #########
 
 # download the file with all the download links 
