@@ -38,7 +38,7 @@ gene_expr_cluster_filename <- sprintf("%sraw/single-cell-portal/cluster/5fd0e449
 
 # read gene expression data
 gene_expr_data <- readr::read_csv(gene_expr_filename,
-  n_max = 3,
+#  n_max = 3,
   col_types = list(
     GENE = readr::col_character(),
     .default = readr::col_double()
@@ -85,12 +85,15 @@ gene_expr_data_unnorm <- gene_expr_data_norm |>
   sweep(2, gene_expr_metadata$UMI_count / 1e6, "*") |>
   round()
 
+# remove gene_expr_data_norm from workspace to save memory
+rm(gene_expr_data_norm)
+
 # save to ondisc matrix
 cat("Creating ODM for gene expression matrix...\n")
 odm_fp <- sprintf("%s/gene_expression_matrix.odm", processed_gene_dir)
 metadata_fp <- sprintf("%s/gene_expression_metadata.rds", processed_gene_dir)
 ondisc::create_ondisc_matrix_from_R_matrix(
-  r_matrix = gene_expr_data_raw,
+  r_matrix = gene_expr_data_unnorm,
   barcodes = cell_barcodes_gene,
   features_df = gene_names,
   odm_fp = odm_fp,
@@ -105,12 +108,15 @@ ondisc::create_ondisc_matrix_from_R_matrix(
   # save to disk
   ondisc::save_odm(metadata_fp = metadata_fp)
 
+# remove gene_expr_data_unnorm from workspace to save memory
+rm(gene_expr_data_unnorm)
+
 ### import protein data ###
 
 cat("Reading protein expression matrix from file...\n")
 prot_expr_filename <- sprintf("%sraw/single-cell-portal/other/raw_CITE_expression.csv", frangieh_dir)
 prot_expr_data <- readr::read_csv(prot_expr_filename,
-  n_max = 3,
+  # n_max = 3,
   col_types = list(
     `...1` = readr::col_character(),
     .default = readr::col_integer()
@@ -146,6 +152,9 @@ ondisc::create_ondisc_matrix_from_R_matrix(
   # save to disk
   ondisc::save_odm(metadata_fp = metadata_fp)
 
+# remove prot_expr_data from workspace to save memory
+rm(prot_expr_data)
+
 ### import gRNA data ###
 
 cat("Reading gRNA assignments from file...\n")
@@ -179,7 +188,7 @@ gRNA_assignment_matrix <- Matrix::sparseMatrix(
   # specifying x is unnecessary because this is a
   # sparse logical matrix, but ondisc does not currently
   # support sparse logical matrix input
-  x = nrow(gRNA_mapping),
+  x = rep(1,nrow(gRNA_mapping)),
   dims = c(nrow(gRNA_list), nrow(gRNA_assignments))
 )
 
