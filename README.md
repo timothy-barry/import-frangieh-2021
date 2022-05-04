@@ -1,7 +1,7 @@
 Frangieh (2021) Data Documentation
 ================
 Gene Katsevich;
-May 3, 2022
+May 4, 2022
 
 # Overview
 
@@ -233,3 +233,18 @@ information and cell cycle information.
     state was “assigned with Scanpy’s implementation of scoring cell
     cycle genes.” So we might need to rerun this portion ourselves to
     obtain the cell cycle information.
+
+# Note: data size
+
+The raw gene expression data, a CSV file of normalized gene expressions,
+is 25GB. There should be no reason for lab members to download this file
+onto their local machine, since it is already processed. Therefore, I
+discourage using `hpcc pull FRANGIEH_2021` to get the processed data
+onto a local machine (ideally, at some point we should extend the
+`hpcc pull` functionality to allow pulling of only the processed data).
+If you’d like to get the processed data onto your machine, I recommend
+using rsync directly:
+
+    rsync -rltvP $REMOTE_FRANGIEH_2021_DATA_DIR/processed/ $LOCAL_FRANGIEH_2021_DATA_DIR/processed/
+
+Note that even the processed data are about 15GB in size.

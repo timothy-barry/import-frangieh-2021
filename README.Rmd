@@ -129,3 +129,11 @@ At least two kinds of information are absent from the data: batch information an
 
 - *Batch.* With this number of cells, it's almost certain that multiple sequencing batches were used. This seems to be suggested in the methods section: "15,000 cells loaded onto each of eight channels per condition using the 10X Chromium system..." I am guessing that "channel" here means sequencing batch or lane or something like that. However, batch effects are not accounted for in the analysis, or discussed at all in the paper. Unfortunately, batch information is also absent from the data published in the Single Cell Portal.
 - *Cell cycle.* The authors used cell cycle as a covariate for their MIMOSCA analysis. However, cell cycle information is apparently not available in the published data. According to the paper, cell cycle state was "assigned with Scanpy’s implementation of scoring cell cycle genes." So we might need to rerun this portion ourselves to obtain the cell cycle information.
+
+# Note: data size
+
+The raw gene expression data, a CSV file of normalized gene expressions, is 25GB. There should be no reason for lab members to download this file onto their local machine, since it is already processed. Therefore, I discourage using `hpcc pull FRANGIEH_2021` to get the processed data onto a local machine (ideally, at some point we should extend the `hpcc pull` functionality to allow pulling of only the processed data). If you'd like to get the processed data onto your machine, I recommend using rsync directly: 
+```
+rsync -rltvP $REMOTE_FRANGIEH_2021_DATA_DIR/processed/ $LOCAL_FRANGIEH_2021_DATA_DIR/processed/
+``` 
+Note that even the processed data are about 15GB in size.
