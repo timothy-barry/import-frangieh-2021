@@ -3,7 +3,7 @@
 # Import Frangieh et al (2020) data.
 #
 #
-# Notes:
+# Notes: This script took 70 minutes and 225 GB of RAM to run. 
 ###############################################################################
 
 ### retrieve top-level data directory ###
