@@ -42,6 +42,10 @@ protein_odm_fp <- sprintf("%s/protein_expression_matrix.odm", processed_protein_
 protein_metadata_fp <- sprintf("%s/protein_expression_metadata.rds", processed_protein_dir)
 protein_odm <- ondisc::read_odm(protein_odm_fp, protein_metadata_fp)
 
+# TIM'S EDIT: define a vector of ("all_cells") containing the intersection of the cells from the different ODMs
+all_cells <- intersect(intersect(ondisc::get_cell_barcodes(gene_odm),
+                                 ondisc::get_cell_barcodes(gRNA_odm)), ondisc::get_cell_barcodes(protein_odm))
+
 # extract info on experimental condition and MOI from gene and gRNA ODMs
 condition_MOI_info <- dplyr::left_join(
   gene_odm |>
@@ -62,10 +66,16 @@ conditions <- condition_MOI_info |>
 
 # for each condition, subset the gene, gRNA, and protein ODMs
 for (condition in conditions) {
+  # TIM'S EDIT: DEACTIVATE THE CELL QC AND MOVE TO SCEPTRE2 DIR; ALSO, INTERSECT CELLS_TO_KEEP WITH ALL_CELLS
   # extract cells in the given condition, with exactly one gRNA
+  # cells_to_keep <- condition_MOI_info |>
+  #  dplyr::filter(condition == !!condition, n_nonzero == 1) |>
+  #  dplyr::pull(cell_barcode)
+  
   cells_to_keep <- condition_MOI_info |>
-    dplyr::filter(condition == !!condition, n_nonzero == 1) |>
-    dplyr::pull(cell_barcode)
+    dplyr::filter(condition == !!condition) |>
+    dplyr::pull(cell_barcode) |>
+    intersect(all_cells)
 
   # rename conditions to eliminate the nonstandard gamma character, and change
   # to lowercase

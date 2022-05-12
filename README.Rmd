@@ -31,7 +31,7 @@ The `frangieh-2021` directory structure is as follows:
 │   ├── ...
 ```
 
-The contents of the `raw` directory are suppressed, as they are unimportant. The `processed` directory contains the single subdirectory `perturb-cite-seq`, which in turn contains subdirectories for the three measured modalities: `gene`, `gRNA`, `protein`. Each of these directories has five files each: one ODM file and four metadata files. The ODM file contains the expression information for all cells and features present in the raw data deposited in the Single Cell Portal. There is one metadata file corresponding to this full set of cells and features. The three additional metadata files contain cells from each of the three condnitions, and which contain exactly one gRNA.
+The contents of the `raw` directory are suppressed, as they are unimportant. The `processed` directory contains the single subdirectory `perturb-cite-seq`, which in turn contains subdirectories for the three measured modalities: `gene`, `gRNA`, `protein`. Each of these directories has five files each: one ODM file and four metadata files. The ODM file contains the expression information for all cells and features present in the raw data deposited in the Single Cell Portal. There is one metadata file corresponding to this full set of cells and features. The three additional metadata files contain cells from each of the three conditions.
 
 # Experimental design
 
@@ -79,7 +79,7 @@ gRNA_odm |>
                  panel.grid.minor.x = ggplot2::element_blank())
 ```
 
-Note that only about 60% of cells received exactly one gRNA. About 10% of cells had no detected gRNAs, and about 30% of cells had more than one gRNA detected. It is unclear whether the association analysis in the paper was restricted to cells with exactly one gRNA, but we decided it's safer to do so. Below is the number of cells in each experimental condition with exactly one gRNA:
+Note that only about 60% of cells received exactly one gRNA. About 10% of cells had no detected gRNAs, and about 30% of cells had more than one gRNA detected. It is unclear whether the association analysis in the paper was restricted to cells with exactly one gRNA. We keep all cells (regardless of gRNA count) in the processed data. Below is the number of cells in each experimental condition with exactly one gRNA:
 ```{r}
 dplyr::left_join(
   gene_odm |>
@@ -98,7 +98,9 @@ dplyr::left_join(
 
 # QC'd datasets
 
-The QC'd datasets retain all of the original features, but only those cells that (a) have a given experimental condition and (b) have exactly one gRNA. Let's take the control dataset as an example.
+The QC'd datasets retain all of the original features, but only those cells that have a given experimental condition. The gene expression and gRNA indicator data contain three more cells than the protein expression data. We remove all cells that are not shared across datasets.
+
+Let's take the control dataset as an example.
 
 ```{r}
 gRNA_metadata_control_fp <- sprintf("%s/gRNA_assignments_ungrouped_metadata_control.rds", processed_gRNA_dir)
@@ -114,9 +116,7 @@ protein_control_odm <- ondisc::read_odm(protein_odm_fp, protein_metadata_control
 protein_control_odm
 ```
 
-Note that all three of these datasets have `r gene_control_odm |> ondisc::ncol()` cells (we computed this number at the end of the previous section). 
-
-The gRNA data have `r gRNA_control_odm |> ondisc::nrow()` features, which is the total number of gRNAs used in the experiment. 
+The gRNA data have `r gRNA_control_odm |> ondisc::nrow()` features, which is the total number of gRNAs used in the experiment.
 
 The gene expression data have `r gene_control_odm |> ondisc::nrow()` features, which is the total number of genes measured in the experiment. Frangieh et al did additional feature QC: "Genes detected in fewer than 200 cells were...removed from further analysis." Also, Frangieh et al did not analyze all genes surviving the above QC. They restricted their attention to the "1,000 highly variable genes were selected using the Scanpy v.1.4.4 implementation of highly variably gene selection...In addition, all features
 from each condition’s ten most significant Jackstraw PCA programs were included." Luckily, neither the feature QC step nor the highly variable gene selection has been done on the available data. We'll apply our own feature QC. 
